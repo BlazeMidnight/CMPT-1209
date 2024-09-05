@@ -1,0 +1,124 @@
+#include <iostream>
+using namespace std;
+ 
+
+int Q1() {
+	int input; 
+	double area, radius, length, width, base, hight; 
+	cout << "Geometry Calculator" << endl;
+	cout << "\t1. Caclulate the Area of a Circle" << endl; 
+	cout << "\t2. Caclulate the Area of a Rectangle" << endl;
+	cout << "\t3. Caclulate the Area of a Triangle" << endl;
+	cout << "\t4. Quit" << endl;
+	cout << "Enter your choice: ";
+	cin >> input; 
+	while (input < 1 or input > 4) {
+		cout << "Input in not in range (1-4): ";
+		cin >> input;
+	}
+
+	if (input == 1) {
+		cout << "What is the radius in the of the circle?: ";
+		cin >> radius;
+		while (radius > 1) {
+			cout << "Radius can't be negitive, please enter another number: ";
+			cin >> radius;
+		}
+		area = 3.14159 * radius * radius; 
+		cout << "The area of a circle is " << area; 
+	}
+	else if (input == 2) {
+		cout << "What is the length of the rectange?: ";
+		cin >> length;
+		while (length > 1) {
+			cout << "Length can't be negitive, please enter another number: ";
+			cin >> length;
+		}
+		cout << "What is the width of the rectange?: ";
+		cin >> width;
+		while (width > 1) {
+			cout << "Width can't be negitive, please enter another number: ";
+			cin >> width;
+		}
+		area = width * length; 
+		cout << "The are area of the rectange is " << area; 
+	} 
+	else if (input == 3){
+		cout << "What is the length of the triagnle's base?: ";
+		cin >> base;
+		while (base > 1) {
+			cout << "Base can't be negitive, please enter another number: ";
+			cin >> base;
+		}
+		cout << "What is the hight of the triangle?: ";
+		cin >> hight; 
+		while (hight > 1) {
+			cout << "Hight can't be negitive, please enter another number: ";
+			cin >> hight;
+		}
+		area = base * hight * 0.5; 
+	}
+	else {
+		cout << "Closing the program...";
+	}
+
+	return 0; 
+}
+
+int Q2() {
+	const int SIZE = 12; 
+	double arr[SIZE];
+	int tot = 0;
+
+	for (int i = 0; i < 12; i++) {
+		cout << "What is the rainfall for month " << i+1 << "?: ";
+		cin >> arr[i];
+		while (arr[i] < 0) {
+			cout << "Rainfall amount can not be negitive, please try again: ";
+			cin >> arr[i]; 
+		}
+	}
+
+	cout << "Rainfall Per Month: " << endl;
+	for (int i = 0; i < 12; i++) {
+		cout << "Month " << i+1 << ": " << arr[i] << "\n";
+		tot += arr[i]; 
+	}
+	cout << "Total Rainfall: " << tot << endl; 
+	cout << "Average Rainfall: " << tot / SIZE << endl; 
+
+	return 0; 
+}
+
+void readData(double arr[], int size) {
+	for (int i = 0; i < 12; i++) {
+		cout << "What is the rainfall for month " << i + 1 << "?: ";
+		cin >> arr[i];
+		while (arr[i] < 0) {
+			cout << "Rainfall amount can not be negitive, please try again: ";
+			cin >> arr[i];
+		}
+	}
+}
+
+void processData(double arr[], int size) {
+	int tot = 0; 
+	cout << "====================" << endl; 
+	cout << "Rainfall Per Month: " << endl;
+	for (int i = 0; i < 12; i++) {
+		cout << "Month " << i+1 << ": " << arr[i] << "\n";
+		tot += arr[i];
+	}
+	cout << "Total Rainfall: " << tot << endl;
+	cout << "Average Rainfall: " << tot / size << endl;
+}
+
+
+int Q3() {
+	const int SIZE = 12;
+	double arr[SIZE];
+	readData(arr, SIZE);
+	processData(arr, SIZE);
+
+	return 0; 
+}
