@@ -6,6 +6,10 @@ int main() {
     double avg, tot = 0;
     cout << "How many students were survayed?: ";
     cin >> size;
+    while(size < 1) {
+        cout << "Number of students can't be less than 1, please try again: ";
+        cin >> size;
+    }
     
     int* arr = new int[size];
     
