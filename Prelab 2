@@ -1,0 +1,36 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int size, min = 100, max = 0;
+    double avg, tot = 0;
+    cout << "How many students were survayed?: ";
+    cin >> size;
+    
+    int* arr = new int[size];
+    
+    for(int i = 0; i < size; i++) {
+        cout << "How many movies did student " << i+1 << " watch?: ";
+        cin >> arr[i];
+        while(arr[i] < 0) {
+            cout << "Must be a number greater than 1. Please enter number of movies: ";
+            cin >> arr[i];
+        }
+        tot += arr[i];
+        if(arr[i] > max) {
+            max = arr[i];
+        }
+        if(arr[i] < min) {
+            min = arr[i];
+        }
+    }
+    
+    avg = tot/size;
+    cout << "Results of the Surveyed" << endl;
+    cout << "=======================" << endl;
+    cout << "The average movies watched: " << avg << endl;
+    cout << "The min number of movies watched: " << min << endl;
+    cout << "The max number of movies watched: " << max << endl;
+    
+    return 0;
+}
