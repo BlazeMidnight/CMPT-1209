@@ -35,6 +35,9 @@ int main() {
     cout << "The average movies watched: " << avg << endl;
     cout << "The min number of movies watched: " << min << endl;
     cout << "The max number of movies watched: " << max << endl;
-    
+
+    delete[] arr;
+    arr = nullptr; 
+
     return 0;
 }
