@@ -1,0 +1,56 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct MovieData {
+    string title;
+    string director;
+    int yearReleased;
+    int min;
+};
+
+int main() {
+    const int SIZE = 2;
+    MovieData movie1, movie2;
+    cout << "=========================================" << endl;
+    cout << "Please input data for the first movie. " << endl;
+    cout << "What is the title of the movie>: ";
+    getline(cin, movie1.title);
+    cout << "Who is the director of the of the movie>: ";
+    getline(cin, movie1.director);
+    cout << "What year was the movie released?: ";
+    cin >> movie1.yearReleased;
+    cout << "How long is the runtime (in mins): ";
+    cin >> movie1.min;
+    cin.ignore();
+    cout << "=========================================" << endl;
+    cout << "Please input data for the seccond movie. " << endl;
+    cout << "What is the title of the movie>: ";
+    getline(cin, movie1.title);
+    cout << "Who is the director of the of the movie>: ";
+    getline(cin, movie1.director);
+    cout << "What year was the movie released?: ";
+    cin >> movie1.yearReleased;
+    cout << "How long is the runtime (in mins): ";
+    cin >> movie1.min;
+    cout << "=========================================" << endl << endl << endl;
+    cin.ignore();
+    
+    cout << "========================" << endl;
+    cout << "Data of the first movie: "<< endl;
+    cout << "Title: " << movie1.title << endl;
+    cout << "Director: " << movie1.title << endl;
+    cout << "Year: " << movie1.yearReleased << endl;
+    cout << "Time: " << movie1.min << endl;
+    cout << "========================" << endl;
+    cout << "Data of the Seccond movie: " << endl;
+    cout << "Title: " << movie2.title << endl;
+    cout << "Director: " << movie2.title << endl;
+    cout << "Year: " << movie2.yearReleased << endl;
+    cout << "Time: " << movie2.min << endl;
+    cout << "========================" << endl;
+    
+    
+    
+    return 0;
+}
