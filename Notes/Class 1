@@ -1,0 +1,91 @@
+#include <iostream>
+using namespace std;
+
+class movieData{
+private:
+    string title; //= "Un-named";
+    string director; //= "Directorless";
+    int year; //= 0;
+    int time; //= 0;
+public:
+    //acessors
+    string getTitle();
+    string getDirector();
+    int getYear();
+    int getTime();
+    //mutators
+    void setTitle(string);
+    void setDirector(string);
+    void setYear(int);
+    void setTime(int);
+    void input();
+    void output();
+    movieData(); // Constructor -> called automatically when creating an object
+    movieData(string, string, int, int); // 2nd contructor
+};
+
+movieData::movieData(string a, string b, int c, int d) {
+    title = a;
+    director = b;
+    year = c;
+    time = d;
+}
+
+movieData::movieData() {
+    title = "Un-named";
+    director = "Directorless";
+    year = 0;
+    time = 0;
+}
+
+void movieData::input(){
+    cout << "Enter the title of the movie: ";
+    getline(cin, title);
+    cout << "Enter the director of the movie: ";
+    getline(cin, director);
+    cout << "Enter the year the movie was released: ";
+    cin >> year;
+    cout << "Enter the running time of the movie (in minutes): ";
+    cin >> time;
+    cin.ignore();
+}
+
+void movieData::output(){
+    cout << "Title: " << title << "\n";
+    cout << "Director: " << director << "\n";
+    cout << "Year Released: " << year<< "\n";
+    cout << "Running Time: " << time << " minutes\n";
+}
+
+string movieData::getTitle() {return title;}
+string movieData::getDirector() {return director;}
+int movieData::getYear() {return year;}
+int movieData::getTime() {return time;}
+void movieData::setTitle(string t) {title = t;}
+void movieData::setDirector(string d) {director = d;}
+void movieData::setYear(int y) {year = y;}
+void movieData::setTime(int r) {time = r;}
+
+int main() {
+    movieData movie1, movie2, movie3("Avatar", "James Cameron", 2006, 1999); // Creating 2 objects
+
+    cout << "Movie 1\n";
+    //movie1.input();
+    cout << "\nMovie 2\n";
+    //movie2.input();
+    cout << "\nMovie 3\n";
+    movie3.input();
+    cout << "============";
+    cout << "\nMovie 1\n";
+    movie1.output();
+    cout << "\nMovie 2\n";
+    movie2.output();
+    cout << "\nMovie 3\n";
+    movie3.output();
+    
+    
+}
+
+    
+
+
