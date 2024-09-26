@@ -17,6 +17,7 @@ public:
     Rational();
     Rational(int, int = 1);
     void reduce();
+    friend Rational operator+(const Rational &a, const Rational &b); 
 };
 
 // Reduce Function
@@ -97,6 +98,15 @@ Rational operator+(const Rational &a, const Rational &b) { // Call by referance
     c.setNumer(a.getNumer() * b.getDenom() + a.getDenom() * b.getNumer());
     c.setDenom(a.getDenom() * b.getDenom());
     return c;
+
+    /*
+    Rational c;
+    c.numer = a.numer*b.denom+a.denom*b.denom;
+    c.denom = a.denom + b.denom; 
+    c.reduce;
+    return c; 
+
+    */
 }
 Rational operator- (const Rational &a, const Rational &b) {
     Rational c;
@@ -159,6 +169,18 @@ Rational operator/= (Rational &a, const Rational &b) {
     a = a / b;
     return a;
 }
+
+Rational operator++ (Rational & a) { //Prefix only ex: ++a
+    a.setNumer(a.getNumer + a.getDenom());
+    return a;
+}
+
+Rational operator++ (Rational & a, int) { // int = dummy var; Postfix only 
+    Rational temp = a;
+    temp.setNumer(a.getNumer + a.getDenom());
+    return temp;
+}
+
 
 
 int main(){
