@@ -1,0 +1,138 @@
+#include <iostream>
+#include <cassert>
+using namespace std;
+
+class Complex{
+private:
+    double real;
+    double img;
+public:
+    double getReal() const;
+    double getImg() const;
+    void setReal(double);
+    void setImg(double );
+    void input();
+    void output() const;
+    Complex();
+    Complex(double, double =  0);
+    friend Complex operator+ (const Complex &r, const Complex &i);
+    friend Complex operator- (const Complex &r, const Complex &i);
+    friend Complex operator* (const Complex &r, const Complex &i);
+    friend Complex operator++ (Complex &r);
+    friend Complex operator++ (Complex &r, int);
+    friend Complex operator-- (Complex &r);
+    friend Complex operator-- (Complex &r, int);
+};
+
+// Cases
+Complex::Complex() {
+    real = 1;
+    img = 1;
+}
+
+Complex::Complex(double x, double y) {
+    real = x;
+    img = y;
+}
+
+// Setters and Getters
+double Complex::getReal() const {return real;}
+double Complex::getImg() const {return img;}
+void Complex::setImg(double i) {img = i;}
+void Complex::setReal(double r) {real = r;}
+
+void Complex::input() {
+    cout << "Enter the real number: ";
+    cin >> real;
+    cout << "Enter the imaginary number: ";
+    cin >> img;
+}
+void Complex::output() const {
+    cout << real << " + " << img << "j" << endl;
+}
+
+//opperators
+// Friends
+Complex operator+ (const Complex &r, const Complex &i) {
+    Complex n;
+    n.real = r.real + i.real;
+    n.img = r.img + i.img;
+    return n;
+}
+
+Complex operator- (const Complex &r, const Complex &i) {
+    Complex n;
+    n.real = r.real - i.real;
+    n.img = r.img - i.img;
+    return n;
+}
+
+Complex operator* (const Complex &r, const Complex &i) {
+    Complex n;
+    n.real = r.real * i.real - r.img * i.img;
+    n.img = r.real * i.img + r.img * i.real;
+    return n;
+}
+
+// Non-Members
+bool operator== (const Complex &r, const Complex &i) {
+    return r.getImg() == i.getImg() && r.getReal() == r.getReal();
+}
+
+bool operator!= (const Complex &r, const Complex &i) {
+    return r.getImg() != i.getImg() && r.getReal() != i.getReal();
+}
+
+Complex operator+= (Complex &r, const Complex &i) {
+    r.setReal(r.getReal() + i.getReal());
+    r.setImg(r.getImg() + i.getImg());
+    return r;
+}
+
+Complex operator-= (Complex &r, const Complex &i) {
+    r.setReal(r.getReal() - i.getReal());
+    r.setImg(r.getImg() - i.getImg());
+    return r;
+}
+
+Complex operator*= (Complex &r, const Complex &i) {
+    r.setReal(r.getReal() * i.getReal() - r.getImg() * i.getImg());
+    r.setImg(r.getReal() * i.getImg() + r.getImg() * i.getReal());
+    return r;
+}
+
+// More friends!
+// Pre-fix
+Complex operator++ (Complex &r) {
+    r.real++;
+    return r;
+}
+
+Complex operator-- (Complex &r) {
+    r.real--;
+    return r;
+}
+
+// Post Fix
+Complex operator++ (Complex &r, int) {
+    Complex temp = r;
+    r.real++;
+    return temp;
+}
+
+Complex operator-- (Complex &r, int) {
+    Complex temp = r;
+    r.real--;
+    return temp;
+}
+
+
+int main() {
+    Complex a(5, 4), b(3, 6), c;
+    ++a;
+    a.output();
+    a++;
+    a.output();
+}
+
+
