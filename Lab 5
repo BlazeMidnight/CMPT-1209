@@ -1,0 +1,194 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Laptop {
+private:
+    string manufacturer;
+    string processor;
+    double screenSize;
+    string color;
+    bool isNew;
+public:
+    string getManufacturer() const;
+    string getProcessor() const;
+    double getScreenSize() const;
+    string getColor() const;
+    bool getIsNew() const;
+    void setManufacturer(string);
+    void setProcessor(string);
+    void setScreenSize(double);
+    void setColor(string);
+    void setIsNew(bool);
+    void input();
+    void output() const;
+    Laptop();
+    Laptop(string, string = "AMD Ryzen", double = 17.3, string = "Silver", bool = false);
+};
+
+
+Laptop::Laptop() {
+    manufacturer = "Asus";
+    processor = "Intel i5";
+    screenSize = 15.6;
+    color = "Black";
+    isNew = true;
+}
+
+Laptop::Laptop(string a, string b, double c, string d, bool e) {
+    manufacturer = a;
+    processor = b;
+    screenSize = c;
+    color = d;
+    isNew = e;
+}
+string Laptop::getManufacturer() const {return manufacturer;}
+string Laptop::getProcessor() const {return processor;}
+double Laptop::getScreenSize() const {return screenSize;}
+string Laptop::getColor() const {return color;}
+bool Laptop::getIsNew() const {return isNew;}
+void Laptop::setManufacturer(string x) {manufacturer = x;}
+void Laptop::setProcessor(string x) {processor = x;}
+void Laptop::setColor(string x) {color = x;}
+void Laptop::setScreenSize(double x) {screenSize = x;}
+void Laptop::setIsNew(bool x) {isNew = x;}
+
+void Laptop::input() {
+    string newStr;
+    cout << "Manufacturer? ";
+    getline(cin, manufacturer);
+    cout << "Processor? ";
+    getline(cin, processor);
+    cout << "ScreenSize? ";
+    cin >> screenSize;
+    cin.ignore();
+    cout << "Color? ";
+    getline(cin, color);
+    cout << "Is this laptop new?(Y/N) ";
+    getline(cin, newStr);
+    if (newStr == "Y" || newStr == "y")
+        isNew = true;
+    else if (newStr == "N" || newStr == "n")
+        isNew = false;
+    else
+        cout << "Invalid answer!!!" << endl;
+    cout << endl;
+}
+
+void Laptop::output() const {
+    cout << "Manufacturer: " << manufacturer << "\t\tProcessor: " << processor << "\t\tScreen Size: " << screenSize << "\t\tColor: " << color;
+    if(isNew)
+        cout << "\t\t New laptop." << endl;
+    else
+        cout << "\t\t Used laptop." << endl;
+    cout << endl;
+}
+
+bool operator== (Laptop a, Laptop b) {
+    return (a.getColor() == b.getColor() and a.getProcessor() == b.getProcessor() and a.getIsNew() == b.getIsNew() and a.getManufacturer() == b.getManufacturer() and a.getScreenSize() == b.getScreenSize());
+}
+
+class ElectronicStore {
+private:
+    string name;
+    string city;
+    int numLaptop;
+    int maxLaptop;
+    Laptop* list;
+public:
+    ElectronicStore(int);
+    ~ElectronicStore();
+    // Note: Only 4 getters, don't need to know anything about the pointer
+    string getName() const;
+    string getCity() const;
+    int getNumLaptop() const;
+    int getMaxLaptop() const;
+    //
+    void setName(string);
+    void setCity(string);
+    // Don't want to change num laptop or max laptop
+    //      Don't want to change the size of array in the middle of laptop
+    //      Want to chnage the num of laptop when adding laptop to array
+    void addLaptop(Laptop);
+    void sellLaptop(Laptop);
+    void displayAll();
+    void displayBrand(string);
+
+};
+
+// Constructor --> Called automatically
+ElectronicStore::ElectronicStore(int s) {
+    name = "";
+    city = "";
+    numLaptop = 0;
+    maxLaptop = s;
+    list = new Laptop[maxLaptop];
+}
+
+// Destructor --> Called automatically when destroy dynamic array
+// ex: ~ElectronicStore()
+ElectronicStore::~ElectronicStore() {
+    delete [] list; // Need to free memory
+}
+
+
+string ElectronicStore::getName() const {return name;}
+string ElectronicStore::getCity() const {return city;}
+int ElectronicStore::getMaxLaptop() const {return maxLaptop;}
+int ElectronicStore::getNumLaptop() const {return numLaptop; }
+void ElectronicStore::setName(string n) {name = n;}
+void ElectronicStore::setCity(string c) {city = c;}
+
+void ElectronicStore::addLaptop(Laptop l) {
+    list[numLaptop] = l;
+    numLaptop++;
+}
+void ElectronicStore::sellLaptop(Laptop a) {
+    for (int i = 0; i < numLaptop; i++) {
+        if (a == list[i]) {
+            for (int j = i; j < numLaptop - 1; j++) {
+                list[j] = list[j + 1];
+            }
+            numLaptop--;
+            break;
+        }
+    }
+}
+
+void ElectronicStore::displayAll() {
+    for(int i = 0; numLaptop > i; i++) {
+       list[i].output();
+    }
+}
+void ElectronicStore::displayBrand(string b) {
+    for(int i = 0; numLaptop > i; i++) {
+        if(b == list[i].getManufacturer()) {
+            list[i].output();
+        }
+    }
+}
+
+int main()
+{
+    ElectronicStore x(1000), y (100);
+    x.setName("Visions");
+    x.setCity("Burnaby");
+    y.setName("Joe's Computer");
+    y.setCity("Maple Ridge");
+    
+    Laptop a("HP", "Intel i7", 15.6, "Black", false), b("Dell", "Intel i5", 15.6, "Black", true), c("Acer");
+    x.addLaptop(a);
+    x.addLaptop(a);
+    x.addLaptop(a);
+    x.addLaptop(b);
+    x.addLaptop(b);
+    x.addLaptop(c);
+    x.displayAll();
+
+    cout << "SOLD LAPTOP!!" << endl;
+    x.sellLaptop(b);
+    x.displayAll();
+
+  
+    return 0;
+}
