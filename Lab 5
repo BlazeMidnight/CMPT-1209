@@ -23,7 +23,7 @@ public:
     void input();
     void output() const;
     Laptop();
-    Laptop(string, string = "AMD Ryzen", double = 17.3, string = "Silver", bool = false);
+    Laptop(string, string = "AMD", double = 17.3, string = "Silver", bool = false);
 };
 
 
@@ -78,9 +78,9 @@ void Laptop::input() {
 void Laptop::output() const {
     cout << "Manufacturer: " << manufacturer << "\t\tProcessor: " << processor << "\t\tScreen Size: " << screenSize << "\t\tColor: " << color;
     if(isNew)
-        cout << "\t\t New laptop." << endl;
+        cout << "\t\t New laptop.";
     else
-        cout << "\t\t Used laptop." << endl;
+        cout << "\t\t Used laptop.";
     cout << endl;
 }
 
@@ -185,9 +185,12 @@ int main()
     x.addLaptop(c);
     x.displayAll();
 
-    cout << "SOLD LAPTOP!!" << endl;
+    cout << endl << "SOLD LAPTOP!!" << endl;
     x.sellLaptop(b);
     x.displayAll();
+    
+    cout << endl << "Brand HP" << endl;
+    x.displayBrand("HP");
 
   
     return 0;
