@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <string>
 #include <iomanip>
@@ -27,6 +28,7 @@ public:
     Student(string, string, string, string, double);
 };
 
+// Defult constructor
 Student::Student() {
     firstName = " ";
     lastName = " ";
@@ -35,14 +37,16 @@ Student::Student() {
     gpa = 0;
 }
 
-Student::Student(string a, string b, string c, string d, double e){
-    firstName = a;
-    lastName = b;
-    studentID = c;
-    phoneNumber = d;
-    gpa = e;
+// Parameterized constructor
+Student::Student(string first, string last, string id, string phone, double grade){
+    firstName = first;
+    lastName = last;
+    studentID = id;
+    phoneNumber = phone;
+    gpa = grade;
 }
 
+// Input for new student
 void Student::input() {
     cout << "Enter first name: "; getline(cin, firstName);
     cout << "Enter last name: "; getline(cin, lastName);
@@ -52,9 +56,10 @@ void Student::input() {
     cin.ignore();
 }
 
+// Student output formatting
 void Student::output() const { cout << left << setw(10) << this->firstName << left << setw(12) <<  this->lastName << "ID: #" << left << setw(13) << this->studentID  << "Phone number: " << left << setw(15) << this->phoneNumber << setw(6)  << "GPA:" << this->gpa << endl;}
 
-
+// Accessors and mutators
 string Student::getFirstName() const {return firstName;}
 string Student::getLastName() const {return lastName;}
 string Student::getStudentID() const {return studentID;}
@@ -75,7 +80,8 @@ private:
     int numStudents;
     Student* classList;
 public:
-    Course(int);
+    Course();
+    Course(string, int, int);
     ~Course();
     string getCourseCode() const;
     int getSectionNum() const;
@@ -83,29 +89,306 @@ public:
     int getNumStudents() const;
     void setCourseCode(string);
     void setSectionNum(int);
-    void addStudent(Student);
-    void removeStudent(Student);
-
+    void addStudent(const Student&);
+    void removeStudentByPhone(const string&);
+    void display() const;
+    void displayByFirst(const string&) const;
+    void displayByLast(const string&) const;
+    void displayByID(const string&) const;
+    void displayByPhone(const string&) const;
+    void sortByFirstAsc();
+    void sortByFirstDes();
+    void sortByLastAsc();
+    void sortByLastDes();
+    void sortByIDAsc();
+    void sortByIDDes();
+    void sortByPhoneAsc();
+    void sortByPhoneDes();
+    void sortByGPAAsc();
+    void sortByGPADes();
 };
 
-Course::Course(int c) {
+// Default constructor
+Course::Course() {
     courseCode = "CMPT";
-    sectionNum = 001;
+    sectionNum = 1;
     capacity = 35;
     numStudents = 0;
     classList = new Student[capacity];
 }
 
-Course::~Course() {
-    delete [] classList;
+// Parameterized constructor
+Course::Course(string code, int section, int cap) {
+    courseCode = code;
+    sectionNum = section;
+    capacity = cap;
+    numStudents = 0;
+    classList = new Student[capacity];
 }
 
+// Destructor to release allocated memory
+Course::~Course() {
+    delete[] classList;
+}
 
+// Accessors and mutators
+string Course::getCourseCode() const { return courseCode; }
+int Course::getSectionNum() const { return sectionNum; }
+int Course::getCapacity() const { return capacity; }
+int Course::getNumStudents() const { return numStudents; }
+void Course::setCourseCode(string code) { courseCode = code; }
+void Course::setSectionNum(int section) { sectionNum = section; }
 
+// Add a student to the course
+void Course::addStudent(const Student& student) {
+    if (numStudents < capacity) {
+        classList[numStudents++] = student;
+    } else {
+        cout << "Course is full, cannot add more students." << endl;
+    }
+}
 
+// Remove student by phone number
+void Course::removeStudentByPhone(const string& phone) {
+    for (int i = 0; i < numStudents; i++) {
+        if (classList[i].getPhoneNumber() == phone) {
+            // Shift remaining students
+            for (int j = i; j < numStudents - 1; j++) {
+                classList[j] = classList[j + 1];
+            }
+            numStudents--;
+            return;
+        }
+    }
+    cout << "Student not found!" << endl;
+}
 
+// Display all students
+void Course::display() const {
+    for (int i = 0; i < numStudents; i++) {
+        classList[i].output();
+    }
+}
+
+// Display by...
+void Course::displayByFirst(const string& firstName) const {
+    for (int i = 0; i < numStudents; i++) {
+        if (classList[i].getFirstName() == firstName) {
+            classList[i].output();
+            return;
+        }
+    }
+    cout << "Student not found!" << endl;
+}
+
+void Course::displayByLast(const string& lastName) const {
+    for (int i = 0; i < numStudents; i++) {
+        if (classList[i].getLastName() == lastName) {
+            classList[i].output();
+            return;
+        }
+    }
+    cout << "Student not found!" << endl;
+}
+
+void Course::displayByID(const string& id) const {
+    for (int i = 0; i < numStudents; i++) {
+        if (classList[i].getStudentID() == id) {
+            classList[i].output();
+            return;
+        }
+    }
+    cout << "Student not found!" << endl;
+}
+
+void Course::displayByPhone(const string& phone) const {
+    for (int i = 0; i < numStudents; i++) {
+        if (classList[i].getPhoneNumber() == phone) {
+            classList[i].output();
+            return;
+        }
+    }
+    cout << "Student not found!" << endl;
+}
+
+// Sorting functions
+void Course::sortByFirstAsc() {
+    for (int i = 0; i < numStudents - 1; i++) {
+        for (int j = 0; j < numStudents - i - 1; j++) {
+            if (classList[j].getFirstName() > classList[j + 1].getFirstName()) {
+                swap(classList[j], classList[j + 1]);
+            }
+        }
+    }
+}
+
+void Course::sortByFirstDes() {
+    for (int i = 0; i < numStudents - 1; i++) {
+        for (int j = 0; j < numStudents - i - 1; j++) {
+            if (classList[j].getFirstName() < classList[j + 1].getFirstName()) {
+                swap(classList[j], classList[j + 1]);
+            }
+        }
+    }
+}
+
+void Course::sortByLastAsc() {
+    for (int i = 0; i < numStudents - 1; i++) {
+        for (int j = 0; j < numStudents - i - 1; j++) {
+            if (classList[j].getLastName() > classList[j + 1].getLastName()) {
+                swap(classList[j], classList[j + 1]);
+            }
+        }
+    }
+}
+
+void Course::sortByLastDes() {
+    for (int i = 0; i < numStudents - 1; i++) {
+        for (int j = 0; j < numStudents - i - 1; j++) {
+            if (classList[j].getLastName() < classList[j + 1].getLastName()) {
+                swap(classList[j], classList[j + 1]);
+            }
+        }
+    }
+}
+
+void Course::sortByIDAsc() {
+    for (int i = 0; i < numStudents - 1; i++) {
+        for (int j = 0; j < numStudents - i - 1; j++) {
+            if (classList[j].getStudentID() > classList[j + 1].getStudentID()) {
+                swap(classList[j], classList[j + 1]);
+            }
+        }
+    }
+}
+
+void Course::sortByIDDes() {
+    for (int i = 0; i < numStudents - 1; i++) {
+        for (int j = 0; j < numStudents - i - 1; j++) {
+            if (classList[j].getStudentID() < classList[j + 1].getStudentID()) {
+                swap(classList[j], classList[j + 1]);
+            }
+        }
+    }
+}
+
+void Course::sortByPhoneAsc() {
+    for (int i = 0; i < numStudents - 1; i++) {
+        for (int j = 0; j < numStudents - i - 1; j++) {
+            if (classList[j].getPhoneNumber() > classList[j + 1].getPhoneNumber()) {
+                swap(classList[j], classList[j + 1]);
+            }
+        }
+    }
+}
+
+void Course::sortByPhoneDes() {
+    for (int i = 0; i < numStudents - 1; i++) {
+        for (int j = 0; j < numStudents - i - 1; j++) {
+            if (classList[j].getPhoneNumber() < classList[j + 1].getPhoneNumber()) {
+                swap(classList[j], classList[j + 1]);
+            }
+        }
+    }
+}
+
+void Course::sortByGPAAsc() {
+    for (int i = 0; i < numStudents - 1; i++) {
+        for (int j = 0; j < numStudents - i - 1; j++) {
+            if (classList[j].getGPA() > classList[j + 1].getGPA()) {
+                swap(classList[j], classList[j + 1]);
+            }
+        }
+    }
+}
+
+void Course::sortByGPADes() {
+    for (int i = 0; i < numStudents - 1; i++) {
+        for (int j = 0; j < numStudents - i - 1; j++) {
+            if (classList[j].getGPA() < classList[j + 1].getGPA()) {
+                swap(classList[j], classList[j + 1]);
+            }
+        }
+    }
+}
+
+// Main function to test the implementation
 int main() {
+    Course myCourse("CMPT1020", 1, 5);
 
+    // Test Case 1: Basic Add and Display Test
+    cout << "Test Case 1: Basic Add and Display Test" << endl;
+    Student s1("Alice", "Smith", "1000000", "604-111-1111", 3.8);
+    Student s2("Bob", "Johnson", "1000001", "604-222-2222", 3.5);
+    myCourse.addStudent(s1);
+    myCourse.addStudent(s2);
+    cout << "Students after addition:" << endl;
+    myCourse.display();
+
+    // Test Case 2: Remove Student Test
+    cout << "\nTest Case 2: Remove Student Test" << endl;
+    myCourse.removeStudentByPhone("604-111-1111");
+    cout << "Students after removal:" << endl;
+    myCourse.display();
     
+    // Test Case 3: Custom input
+    cout << "\nTest Case 3: Custom input" << endl;
+    char choice;
+    do {
+        Student student;
+        student.input();
+        myCourse.addStudent(student);
+        
+        cout << "Add another student? (y/n): ";
+        cin >> choice;
+        cin.ignore(); // Clear the newline left in the buffer
+    } while (choice == 'y' || choice == 'Y');
+
+    cout << "\nCurrent students in the course:\n";
+    myCourse.display();
+    
+
+    // Test Case 4: Sorting by Different Criteria
+    cout << "\nTest Case 3: Sorting by Different Criteria" << endl;
+    Student s3("Charlie", "Brown", "1000003", "604-333-3333", 3.2);
+    Student s4("David", "Adams", "1000004", "604-444-4444", 3.9);
+    Student s5("Eva", "Robinson", "1000005", "604-555-5555", 2.8);
+    myCourse.addStudent(s3);
+    myCourse.addStudent(s4);
+    myCourse.addStudent(s5);
+
+    cout << "Before sorting:" << endl;
+    myCourse.display();
+
+    myCourse.sortByIDAsc();  // Sort by first name ascending
+    cout << "\nAfter sorting by first name ascending:" << endl;
+    myCourse.display();
+
+    myCourse.sortByLastDes();    // Sort by last name descending
+    cout << "\nAfter sorting by last name descending:" << endl;
+    myCourse.display();
+
+    myCourse.sortByGPAAsc();    // Sort by GPA ascending
+    cout << "\nAfter sorting by GPA ascending:" << endl;
+    myCourse.display();
+    
+    
+    // Test Case 5: Remove Non-Existent Student Test
+    cout << "\nTest Case 5: Remove Non-Existent Student Test" << endl;
+    myCourse.removeStudentByPhone("604-999-9999"); // This should print an error message
+
+    // Test Case 6: Sorting with Identical Names and GPAs
+    cout << "\nTest Case 6: Sorting with Identical Names and GPAs" << endl;
+    Student s7("George", "Smith", "1000007", "604-777-7777", 3.5);
+    Student s8("Hannah", "Smith", "1000008", "604-888-8888", 3.5);
+    myCourse.addStudent(s7);
+    myCourse.addStudent(s8);
+    
+    // Sort by first name ascending
+    myCourse.sortByFirstAsc();
+    cout << "\nAfter sorting by first name ascending with identical names:" << endl;
+    myCourse.display();
+
     return 0;
 }
+
