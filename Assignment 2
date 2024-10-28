@@ -1,0 +1,145 @@
+#include <iostream>
+#include <string>
+#include <iomanip>
+#include <vector>
+using namespace std;
+
+class PersonData {
+protected:
+    string lastName;
+    string firstName;
+    string address;
+    string city;
+    string state;
+    string zip;
+    string phone;
+public:
+    PersonData();
+    PersonData(string, string, string, string, string, string, string);
+    string getLastName() const;
+    string getFirstName() const;
+    string getAddress() const;
+    string getCity() const;
+    string getState() const;
+    string getZip() const;
+    string getPhone() const;
+    void setLastName(string);
+    void setFirstName(string);
+    void setAddress(string);
+    void setCity(string);
+    void setState(string);
+    void setZip(string);
+    void setPhone(string);
+    void input();
+    void output() const;
+};
+
+PersonData::PersonData() {
+    lastName = "Doe";
+    firstName = "John";
+    address = "0000 Knowwhere Street";
+    city = "Somewhere";
+    state = "Alaska";
+    zip = "A1B C2D";
+    phone = "123-456-7890";
+}
+
+PersonData::PersonData(string a, string b, string c, string d, string e, string f, string g) {
+    lastName = a;
+    firstName = b;
+    address = c;
+    city = d;
+    state = e;
+    zip = f;
+    phone = g;
+}
+
+string PersonData::getLastName() const {return lastName;}
+string PersonData::getFirstName() const {return firstName;}
+string PersonData::getAddress() const {return address;}
+string PersonData::getCity() const {return city;}
+string PersonData::getState() const {return state;}
+string PersonData::getZip() const {return zip;}
+string PersonData::getPhone() const {return phone;}
+void PersonData::setLastName(string a) {lastName = a;}
+void PersonData::setFirstName(string b) {firstName = b;}
+void PersonData::setAddress(string c) {address = c;}
+void PersonData::setCity(string d) {city = d;}
+void PersonData::setState(string e) {state = e;}
+void PersonData::setZip(string f) {zip = f;}
+void PersonData::setPhone(string g) {phone = g;}
+
+void PersonData::output() const {
+    cout << left <<
+    "Last Name: " << setw(10) << lastName <<
+    "First Name: " << setw(10) << firstName <<
+    "Address: " << setw(25) << address <<
+    "City: " << setw(15) << city <<
+    "State: " << setw(10) << state <<
+    "Zip Code: " << setw(10) << zip <<
+    "Phone #: " << setw(20) << phone << endl;
+}
+
+void PersonData::input() {
+    cout << "Please enter personal details as followed" << endl;
+    cout << "First Name: ";
+    cin >> firstName;
+    cout << "Last Name: ";
+    cin >> lastName;
+    cout << "Address: ";
+    cin >> address;
+    cout << "City: ";
+    cin >> city;
+    cout << "State: ";
+    cin >> state;
+    cout << "Zip Code: ";
+    cin >> zip;
+    cout << "Phone #: ";
+    cin >> phone;
+}
+
+class CustomerData: public PersonData { // Public vs private
+protected: // Is there any cases where you don't want to use protected?
+    int customerNumber;
+    bool mailingList;
+public:
+    CustomerData();
+    CustomerData(int, bool);
+    int getCustomerNumber() const;
+    bool getMailingList() const;
+    // void setCustomerNumber(int);
+    void setMailingList(bool);
+    void input();
+    void output() const;
+};
+
+CustomerData::CustomerData() {
+    customerNumber = -1;
+    mailingList = true;
+}
+
+CustomerData::CustomerData(int a, bool b) {
+    customerNumber = a;
+    mailingList = b;
+}
+
+int CustomerData::getCustomerNumber() const {return customerNumber;}
+bool CustomerData::getMailingList() const {return mailingList;}
+void CustomerData::setMailingList(bool a) {mailingList = a;}
+
+void CustomerData::input() {}
+void CustomerData::output() const {}
+
+class PreferredCustomer: public CustomerData {
+private:
+    
+};
+
+
+int main() {
+    //vector<int> customerNums;
+    
+    
+    PersonData a;
+    a.output();
+}
