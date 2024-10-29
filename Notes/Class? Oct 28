@@ -1,0 +1,150 @@
+#include <iostream>
+using namespace std;
+
+// Overloading =, when is it good when is it bad?
+
+ /*
+class Box {
+private:
+    int x;
+    int y;
+public:
+    Box() {x = 0; y = 0;}
+    void setX(int a) {x = a;}
+    void setY(int a) {y = a;}
+    int getX() {return x;}
+    int getY() {return y;}
+};
+
+
+int main()
+{
+    Box a, b; // 0 & 0
+    a.setX(10);
+    a.setY(20); // a is a 10x20 box
+    b = a; // member-wise assignment (member to member); automatically done by c++ compilers
+    cout << "After assignment statement" << endl;
+    cout << a.getX() << " " << a.getY() << endl;
+    cout << b.getX() << " " << b.getY() << endl;
+    a.setX(30);
+    a.setY(40);
+    b.setX(50);
+    b.setY(60);
+    cout << "After updating a and b" << endl;
+    cout << a.getX() << " " << a.getY() << endl;
+    cout << b.getX() << " " << b.getY() << endl;
+    // A and B are independent to each other --> good
+    return 0;
+}
+*/
+
+ ///*
+class StudentTestScores
+{
+private:
+    // Problem is here --> the pointer
+    string studentName;  // The student's name
+    double* testScores;  // Points to array of test scores
+    int numTestScores;   // Number of test scores
+    // too much dependednt on eachother, one change for one person will affect everyone
+    // issue: Using same location (pointer) for each one
+    // Member-wise assignment doesn't work that well for this case (pointers?)
+    // Need to define our own technique for assignments
+public:
+    StudentTestScores(int size){ //Constructor that builds the info of the student
+        this->studentName = " ";
+        this->numTestScores = size;
+        this->testScores = new double[size];
+        for (int i = 0; i < size; i++)
+            this->testScores[i] = 0;
+    }
+    
+    ~StudentTestScores() {delete[] this->testScores;}     // MAKE SURE to DELETE DYNAMIC ARRAYS
+    // Creation and distruction have opposite order
+    // Adam will be distroyed first
+    // Deconstructions muchat have ther operator overload or else will fail
+        // Runtime error --> dependancy
+
+
+    void setTestScore(double score, int index){ this->testScores[index] = score; }
+    void setStudentName(string name) {this->studentName = name;}
+    string getStudentName() const {return this->studentName;}
+    int getNumTestScores(){return this->numTestScores;}
+    double getTestScore(int index) const {return this->testScores[index];}
+    
+    void displayStudent(){
+        cout << "Name: " << this->studentName << endl;
+        cout << "Test Scores: ";
+        for (int i = 0; i < numTestScores; i++)
+             cout << this->testScores[i] << " ";
+        cout << endl;
+    }
+
+    // Overloaded = operator
+    // Member opperator
+    // left (aka *this) = right
+    const StudentTestScores operator=(const StudentTestScores& right) {
+        delete[] this->testScores; // Free the memery of this, unpoint to the pointer
+        this->studentName = right.studentName; // Copy the name to name --> this will be changed back to original name at a later point
+        this->numTestScores = right.numTestScores; //
+        this->testScores = new double[this->numTestScores]; // Allocate somewhere else
+        for (int i = 0; i < this->numTestScores; i++) // loop through the old values, to copy to new array
+            this->testScores[i] = right.testScores[i]; // return new pointer to array
+        return *this;
+    }
+
+    // Copy constructor
+    // Without this, Jack and Adam are still dependent on each other
+    // This is because
+
+    StudentTestScores(const StudentTestScores& obj) {
+        // no need to free memery, The data isn't created yet
+        this->studentName = obj.studentName;
+        this->numTestScores = obj.numTestScores;
+        this->testScores = new double[this->numTestScores];
+        for (int i = 0; i < this->numTestScores; i++)
+            this->testScores[i] = obj.testScores[i];
+        // Only different is last and first stemp not required
+        // Contructors don't return (call) anything. Automatically called
+    }
+
+};
+
+int main()
+{
+    StudentTestScores student1(3);
+    student1.setStudentName("Jack");
+    student1.setTestScore(100.0, 0);
+    student1.setTestScore(95.0, 1);
+    student1.setTestScore(80, 2);
+    student1.displayStudent();
+    
+    // /*
+    StudentTestScores student2(3); // This line isn't the same as 5 below
+    student2 = student1; // example of assignemnt opperator, so david is doing well. We fixed the problem
+    student2.setStudentName("David");
+    student2.displayStudent();
+
+    StudentTestScores student3  = student1; // This is not an assignment, just a copy constructor. Can only do it when you create a new "Student"
+    student3.setStudentName("Adam"); // Adam will be destoryed first.
+    student3.displayStudent();
+    
+    // Jack    David    Adam
+    // 100     100      100
+    // 95      95       95
+    // 80      80       80
+
+    student1.setTestScore(88, 0); // Expect   Jack    David    Adam  --> doesn't use this type of data stuctures
+    student1.setTestScore(88, 0);          // 88     100      100
+    student2.setTestScore(77, 1);          // 95      77       95
+    student3.setTestScore(66, 2);          // 80      80       66
+    // Stored to a pointer --> copys of eachother, all pointing to the same location
+    cout << "After updating students 1,2, and 3" << endl;
+    student1.displayStudent();
+    student2.displayStudent();
+    student3.displayStudent();
+
+
+    return 0;
+}
+// */
