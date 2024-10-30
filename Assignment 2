@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
-#include <vector>
 using namespace std;
 
 class PersonData {
@@ -41,7 +40,7 @@ PersonData::PersonData() {
     city = "Somewhere";
     state = "Alaska";
     zip = "A1B C2D";
-    phone = "123-456-7890";
+    phone = "1234567890";
 }
 
 PersonData::PersonData(string a, string b, string c, string d, string e, string f, string g) {
@@ -54,92 +53,181 @@ PersonData::PersonData(string a, string b, string c, string d, string e, string 
     phone = g;
 }
 
-string PersonData::getLastName() const {return lastName;}
-string PersonData::getFirstName() const {return firstName;}
-string PersonData::getAddress() const {return address;}
-string PersonData::getCity() const {return city;}
-string PersonData::getState() const {return state;}
-string PersonData::getZip() const {return zip;}
-string PersonData::getPhone() const {return phone;}
-void PersonData::setLastName(string a) {lastName = a;}
-void PersonData::setFirstName(string b) {firstName = b;}
-void PersonData::setAddress(string c) {address = c;}
-void PersonData::setCity(string d) {city = d;}
-void PersonData::setState(string e) {state = e;}
-void PersonData::setZip(string f) {zip = f;}
-void PersonData::setPhone(string g) {phone = g;}
+string PersonData::getLastName() const { return lastName; }
+string PersonData::getFirstName() const { return firstName; }
+string PersonData::getAddress() const { return address; }
+string PersonData::getCity() const { return city; }
+string PersonData::getState() const { return state; }
+string PersonData::getZip() const { return zip; }
+string PersonData::getPhone() const { return phone; }
+void PersonData::setLastName(string a) { lastName = a; }
+void PersonData::setFirstName(string b) { firstName = b; }
+void PersonData::setAddress(string c) { address = c; }
+void PersonData::setCity(string d) { city = d; }
+void PersonData::setState(string e) { state = e; }
+void PersonData::setZip(string f) { zip = f; }
+void PersonData::setPhone(string g) { phone = g; }
 
 void PersonData::output() const {
-    cout << left <<
-    "Last Name: " << setw(10) << lastName <<
-    "First Name: " << setw(10) << firstName <<
-    "Address: " << setw(25) << address <<
-    "City: " << setw(15) << city <<
-    "State: " << setw(10) << state <<
-    "Zip Code: " << setw(10) << zip <<
-    "Phone #: " << setw(20) << phone << endl;
+    cout << left
+         << "~PERSONAL DATA~" << endl
+         << setw(20) << "\tLast Name:" << lastName << endl
+         << setw(20) << "\tFirst Name:" << firstName << endl
+         << setw(20) << "\tAddress:" << address << endl
+         << setw(20) << "\tCity:" << city << endl
+         << setw(20) << "\tState:" << state << endl
+         << setw(20) << "\tZip Code:" << zip << endl
+         << setw(20) << "\tPhone #:" << phone << endl;
 }
 
 void PersonData::input() {
-    cout << "Please enter personal details as followed" << endl;
-    cout << "First Name: ";
-    cin >> firstName;
-    cout << "Last Name: ";
-    cin >> lastName;
-    cout << "Address: ";
-    cin >> address;
-    cout << "City: ";
-    cin >> city;
-    cout << "State: ";
-    cin >> state;
-    cout << "Zip Code: ";
-    cin >> zip;
-    cout << "Phone #: ";
-    cin >> phone;
+    cout << "~Please enter personal details~" << endl;
+    cout << "First Name: "; getline(cin, firstName);
+    cout << "Last Name: "; getline(cin, lastName);
+    cout << "Address: "; getline(cin, address);
+    cout << "City: "; getline(cin, city);
+    cout << "State: "; getline(cin, state);
+    cout << "Zip Code: "; getline(cin, zip);
+    cout << "Phone #: "; getline(cin, phone);
 }
 
-class CustomerData: public PersonData { // Public vs private
-protected: // Is there any cases where you don't want to use protected?
+
+
+
+
+
+class CustomerData : public PersonData {
+protected:
+    static int nextCustomerNumber;
     int customerNumber;
     bool mailingList;
 public:
     CustomerData();
-    CustomerData(int, bool);
+    CustomerData(bool mailList);
     int getCustomerNumber() const;
     bool getMailingList() const;
-    // void setCustomerNumber(int);
     void setMailingList(bool);
+    void output() const;
+    void input();
+};
+
+int CustomerData::nextCustomerNumber = 1;
+CustomerData::CustomerData() {
+    customerNumber = nextCustomerNumber++;
+    mailingList = true;
+}
+CustomerData::CustomerData(bool mailList) {
+    customerNumber = nextCustomerNumber++;
+    mailingList = mailList;
+}
+
+int CustomerData::getCustomerNumber() const { return customerNumber; }
+bool CustomerData::getMailingList() const { return mailingList; }
+void CustomerData::setMailingList(bool a) { mailingList = a; }
+
+
+void CustomerData::output() const {
+    PersonData::output();
+    cout << "~CUSTOMER DATA~" << endl << setw(20) << "\tID:" << customerNumber << endl;
+    cout << setw(20) << "\tMailing List:" << (mailingList ? "Yes" : "No") << endl;
+}
+
+
+void CustomerData::input() {
+    int yn;
+    cout << "Do you want to be on the mainling list? (1 = yes, 2 = no) ";
+    cin >> yn;
+    while(yn != 1 and yn != 2) {
+        cout << "Invalid. Please enter 1 for yes or 2 for no: ";
+        cin >> yn;
+    }
+}
+
+
+
+
+
+class PreferredCustomer : public CustomerData {
+private:
+    double purchasesAmount;
+    double discountLevel;
+public:
+    PreferredCustomer();
+    PreferredCustomer(double);
+    double getPurchasesAmount() const;
+    double getDiscountLevel() const;
+    void addPurchase(double);
+    void updateDiscountLevel();
     void input();
     void output() const;
 };
 
-CustomerData::CustomerData() {
-    customerNumber = -1;
-    mailingList = true;
+PreferredCustomer::PreferredCustomer() {
+    purchasesAmount = 0;
+    discountLevel = 0;
 }
 
-CustomerData::CustomerData(int a, bool b) {
-    customerNumber = a;
-    mailingList = b;
+PreferredCustomer::PreferredCustomer(double a) {
+    purchasesAmount = a;
+    updateDiscountLevel();
 }
 
-int CustomerData::getCustomerNumber() const {return customerNumber;}
-bool CustomerData::getMailingList() const {return mailingList;}
-void CustomerData::setMailingList(bool a) {mailingList = a;}
+double PreferredCustomer::getPurchasesAmount() const { return purchasesAmount; }
 
-void CustomerData::input() {}
-void CustomerData::output() const {}
+double PreferredCustomer::getDiscountLevel() const { return discountLevel; }
 
-class PreferredCustomer: public CustomerData {
-private:
-    
-};
+void PreferredCustomer::addPurchase(double amount) {
+    if (amount < 0) {
+        cout << "Invalid purchase amount!" << endl;
+        return;
+    }
+    purchasesAmount += amount;
+    updateDiscountLevel();
+}
+
+void PreferredCustomer::updateDiscountLevel() {
+    if (purchasesAmount >= 2000) discountLevel = 0.10;
+    else if (purchasesAmount >= 1500) discountLevel = 0.07;
+    else if (purchasesAmount >= 1000) discountLevel = 0.06;
+    else if (purchasesAmount >= 500) discountLevel = 0.05;
+    else discountLevel = 0.0;
+}
+
+void PreferredCustomer::input() {
+    double amount;
+    cout << "Enter total historical purchases amount: ";
+    cin >> amount;
+    addPurchase(amount);
+}
+
+void PreferredCustomer::output() const {
+    CustomerData::output();
+    cout << "~DISCOUNT DATA~" << endl << setw(20) << "\tTotal Amount: $" << purchasesAmount << endl;
+    cout << setw(20) << "\tDiscount:" << (discountLevel * 100) << "%" << endl;
+}
+
 
 
 int main() {
-    //vector<int> customerNums;
-    
-    
-    PersonData a;
-    a.output();
+    PersonData person;
+    person.input();
+    person.output();
+
+    CustomerData customer;
+    customer.input();
+    customer.output();
+
+    PreferredCustomer preferred;
+    preferred.input();
+    preferred.output();
+
+    double additionalPurchase;
+    cout << "\nEnter an additional purchase amount to add: $";
+    cin >> additionalPurchase;
+    preferred.addPurchase(additionalPurchase);
+    preferred.output();
+
+    return 0;
 }
+
+
