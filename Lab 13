@@ -1,0 +1,496 @@
+#include <iostream>
+#include <string>
+#include <iomanip>
+#include <vector>
+using namespace std;
+class Student {
+private:
+    string firstName;
+    string lastName;
+    string studentID;
+    string phoneNumber;
+    double gpa;
+public:
+    Student(string, string = " ", string = " ", string = " ", double = 0);
+    Student();
+    string getFirstName() const;
+    string getLastName() const;
+    string getStudentID() const;
+    string getPhoneNumber() const;
+    double getGPA() const;
+    void setFirstName(string);
+    void setLastName(string);
+    void setStudentID(string);
+    void setPhoneNumber(string);
+    void setGPA(double);
+    void input();
+    void output() const;
+    friend istream& operator>> (istream&, Student&);
+    bool operator==(const Student&);
+    friend ostream& operator << (ostream&, const Student&);
+};
+
+Student::Student(string a, string b , string c , string d , double e){
+    firstName = a;
+    lastName = b;
+    studentID = c;
+    phoneNumber = d;
+    gpa = e;
+}
+
+Student::Student() {
+    firstName = " ";
+    lastName = " ";
+    studentID = " ";
+    phoneNumber = " ";
+    gpa = 0;
+}
+
+string Student::getFirstName() const {return firstName;}
+string Student::getLastName() const {return lastName;}
+string Student::getStudentID() const {return studentID;}
+string Student::getPhoneNumber() const {return phoneNumber;}
+double Student::getGPA() const{return gpa;}
+void Student::setFirstName(string x){firstName = x;}
+void Student::setLastName(string x){lastName = x;}
+void Student::setStudentID(string x){studentID = x;}
+void Student::setPhoneNumber(string x){phoneNumber = x;}
+void Student::setGPA(double x){gpa = x;}
+void Student::input()
+{
+    cout << "\n---Please enter student information---\n";
+    cout << "First name: ";
+    getline(cin,this->firstName);
+    cout << "Last name: ";
+    getline(cin,this->lastName);
+    cout << "Student ID: ";
+    getline(cin,this->studentID);
+    cout << "Phone Number: ";
+    getline(cin,this->phoneNumber);
+    cout << "GPA: ";
+    cin >> this->gpa;
+    cin.ignore();
+}
+
+istream& operator>> (istream& strm, Student& obj){
+    cout << "\n---Please enter student information---\n";
+    cout << "First name: ";
+    getline(strm, obj.firstName);
+    cout << "Last name: ";
+    getline(strm, obj.lastName);
+    cout << "Student ID: ";
+    getline(strm, obj.studentID);
+    cout << "Phone Number: ";
+    getline(strm, obj.phoneNumber);
+    cout << "GPA: ";
+    cin >> obj.gpa;
+    cin.ignore();
+    return strm;
+}
+
+void Student::output() const{
+    cout << left << setw(20) << firstName << setw(20) << lastName <<
+        setw(10) << studentID << setw(15) << phoneNumber <<
+        setw(5) << gpa << endl;
+}
+
+ostream& operator << ( ostream& strm, const Student &obj){
+    strm << left << setw(20) << obj.firstName << setw(20) << obj.lastName <<
+        setw(10) << obj.studentID << setw(15) << obj.phoneNumber <<
+        setw(5) << obj.gpa << endl;
+    return strm;
+}
+
+bool Student::operator==(const Student& a){
+    return (this->firstName == a.firstName && this->lastName == a.lastName && this->studentID == a.studentID && this->phoneNumber == a.phoneNumber && this->gpa == a.gpa);
+}
+
+
+class Course{
+private:
+    string code;
+    int section;
+    vector <Student> list; // chagne to vector
+public:
+    Course();
+    Course(string, int);
+    string getCode() const;
+    int getSection() const;
+    int getNumStudents() const;
+    void setCode(string);
+    void setSection(int);
+    void add(Student);
+    void remove(string);
+
+    //Display functions
+    void display() const;
+    void displayByFirst(string) const;
+    void displayByLast(string) const;
+    void displayBystudentID(string) const;
+    void displayByPhone(string) const;
+
+    //Sort functions
+    void sortByFirstAsc();
+    void sortByFirstDes();
+    void sortByLastAsc();
+    void sortByLastDes();
+    void sortBystudentIDAsc();
+    void sortBystudentIDDes();
+    void sortByPhoneAsc();
+    void sortByPhoneDes();
+    void sortByGPAAsc();
+    void sortByGPADes();
+};
+
+Course::Course(){
+    code = "CMPT";
+    section = 1;
+}
+Course::Course(string a, int b){
+    code = a;
+    section = b;
+}
+
+string Course::getCode() const {return this->code;}
+int Course::getSection() const {return this->section;}
+int Course::getNumStudents() const{return list.size();}
+void Course::setCode(string a){this->code = a;}
+void Course::setSection(int a){this->section = a;}
+void Course::add(Student a){
+        list.push_back(a);
+        cout << "Student " << a.getFirstName() << " " << a.getLastName() << " added" << endl;
+        cout << "Current number of students is: " << list.size() << endl;
+}
+
+void Course::remove(string a){
+    int found = 0;
+    auto it = list.begin();
+    for (auto it = list.begin(); it != list.end(); it++){
+        if (it->getPhoneNumber() == a){
+            found = 1;
+            cout << "\nStudent " << it->getFirstName() << " " << it->getLastName() << " with phone number: " << a << " has been removed successfully and class list has been updated!\n";
+            list.erase(it);
+            break;
+        }
+    }
+    if (found != 1)
+        cout << "Student not found!";
+}
+
+//Displays
+void Course::display() const {
+    cout << "\n-----------Class List-----------\n";
+    cout << "Course code: " << this->code << endl;
+    cout << "Course section: " << this->section << endl;
+    cout << "Number of students: " << this->list.size() << endl;
+    cout << "List of students: " << endl;
+    for (int i = 0; i < list.size(); i++)
+        cout << list[i];
+    cout << endl;
+}
+
+void Course::displayByFirst(string a) const {
+    int found = 0;
+    cout << "---------------------------\n" << "Seraching for student with first name: " << a << "........\n";
+    for (int i = 0; i < list.size(); i++) {
+        if (list[i].getFirstName() == a) {
+            found = 1;
+            list[i].output();
+        }
+    }
+    if (found != 1)
+        cout << "Student not found!" << endl;
+}
+
+void Course::displayByLast(string a) const {
+    int found = 0;
+    cout << "---------------------------\n" << "Seraching for student with last name: " << a << "........\n";
+    for (int i = 0; i < list.size(); i++) {
+        if (list[i].getLastName() == a)  {
+            found = 1;
+            list[i].output();
+        }
+    }
+    if (found != 1)
+        cout << "Student not found!" << endl;
+}
+
+void Course::displayBystudentID(string a) const
+{
+    int found = 0;
+    cout << "---------------------------\n" << "Seraching for student with Student studentID: " << a << "........\n";
+    for (int i = 0; i < list.size(); i++){
+        if (list[i].getStudentID() == a){
+            found = 1;
+            list[i].output();
+        }
+    }
+    if (found != 1)
+        cout << "Student not found!" << endl;
+}
+
+void Course::displayByPhone(string a) const {
+    int found = 0;
+    cout << "---------------------------\n" << "Seraching for student with Phone Number: " << a << "........\n";
+    for (int i = 0; i < list.size(); i++){
+        if (list[i].getPhoneNumber() == a){
+            found = 1;
+            list[i].output();
+        }
+    }
+    if (found != 1)
+        cout << "Student not found!"<<endl;
+}
+
+//Sorts
+void Course::sortByFirstAsc()
+{
+    int mIndex;
+    Student mStudent;
+    for (int start = 0; start < (list.size() - 1); start++){
+        mIndex = start;
+        mStudent = list[start];
+        for (int i = start+1; i < list.size(); i++){
+            if (list[i].getFirstName() < mStudent.getFirstName()){
+                mIndex = i;
+                mStudent = list[i];
+            }
+        }
+        swap(list[mIndex], list[start]);
+    }
+    this->display();
+}
+
+void Course::sortByFirstDes(){
+    int mIndex;
+    Student mStudent;
+    for (int start = 0; start < (list.size() - 1); start++){
+        mIndex = start;
+        mStudent = list[start];
+        for (int i = start + 1; i < list.size(); i++){
+            if (list[i].getFirstName() > mStudent.getFirstName()){
+                mIndex = i;
+                mStudent = list[i];
+            }
+        }
+        swap(list[mIndex], list[start]);
+    }
+    this->display();
+}
+
+void Course::sortByLastAsc(){
+    int mIndex;
+    Student mStudent;
+    for (int start = 0; start < (list.size() - 1); start++){
+        mIndex = start;
+        mStudent = list[start];
+        for (int i = start + 1; i < list.size(); i++){
+            if (list[i].getLastName() < mStudent.getLastName()){
+                mIndex = i;
+                mStudent = list[i];
+            }
+        }
+        swap(list[mIndex], list[start]);
+    }
+    this->display();
+}
+
+void Course::sortByLastDes(){
+    int mIndex;
+    Student mStudent;
+    for (int start = 0; start < (list.size() - 1); start++){
+        mIndex = start;
+        mStudent = list[start];
+        for (int i = start + 1; i < list.size(); i++){
+            if (list[i].getLastName() > mStudent.getLastName()){
+                mIndex = i;
+                mStudent = list[i];
+            }
+        }
+        swap(list[mIndex], list[start]);
+    }
+    this->display();
+}
+
+void Course::sortBystudentIDAsc() {
+    int mIndex;
+    Student mStudent;
+    for (int start = 0; start < (list.size() - 1); start++){
+        mIndex = start;
+        mStudent = list[start];
+        for (int i = start + 1; i < list.size(); i++){
+            if (list[i].getStudentID() < mStudent.getStudentID()) {
+                mIndex = i;
+                mStudent = list[i];
+            }
+        }
+        swap(list[mIndex], list[start]);
+    }
+    this->display();
+}
+
+void Course::sortBystudentIDDes() {
+    int mIndex;
+    Student mStudent;
+    for (int start = 0; start < (list.size() - 1); start++) {
+        mIndex = start;
+        mStudent = list[start];
+        for (int i = start + 1; i < list.size(); i++) {
+            if (list[i].getStudentID() > mStudent.getStudentID()) {
+                mIndex = i;
+                mStudent = list[i];
+            }
+        }
+        swap(list[mIndex], list[start]);
+    }
+    this->display();
+}
+
+void Course::sortByPhoneAsc() {
+    int mIndex;
+    Student mStudent;
+    for (int start = 0; start < (list.size() - 1); start++) {
+        mIndex = start;
+        mStudent = list[start];
+        for (int i = start + 1; i < list.size(); i++) {
+            if (list[i].getPhoneNumber() < mStudent.getPhoneNumber()) {
+                mIndex = i;
+                mStudent = list[i];
+            }
+        }
+        swap(list[mIndex], list[start]);
+    }
+    this->display();
+}
+
+void Course::sortByPhoneDes() {
+    int mIndex;
+    Student mStudent;
+    for (int start = 0; start < (list.size() - 1); start++) {
+        mIndex = start;
+        mStudent = list[start];
+        for (int i = start + 1; i < list.size(); i++) {
+            if (list[i].getPhoneNumber() > mStudent.getPhoneNumber()) {
+                mIndex = i;
+                mStudent = list[i];
+            }
+        }
+        swap(list[mIndex], list[start]);
+    }
+    this->display();
+}
+
+void Course::sortByGPAAsc() {
+    int mIndex;
+    Student mStudent;
+    for (int start = 0; start < (list.size() - 1); start++){
+        mIndex = start;
+        mStudent = list[start];
+        for (int i = start + 1; i < list.size(); i++){
+            if (list[i].getGPA() < mStudent.getGPA()){
+                mIndex = i;
+                mStudent = list[i];
+            }
+        }
+        swap(list[mIndex], list[start]);
+    }
+    this->display();
+}
+
+void Course::sortByGPADes() {
+    int mIndex;
+    Student mStudent;
+    for (int start = 0; start < (list.size() - 1); start++) {
+        mIndex = start;
+        mStudent = list[start];
+        for (int i = start + 1; i < list.size(); i++) {
+            if (list[i].getGPA() > mStudent.getGPA()) {
+                mIndex = i;
+                mStudent = list[i];
+            }
+        }
+        swap(list[mIndex], list[start]);
+    }
+    this->display();
+}
+
+int main() {
+
+    string temp;
+    Student a("Alice", "Smith", "1000000", "604-111-1111", 3.8);
+    Student b("Bob", "Johnson", "1000001", "604-222-2222", 3.5);
+    Student c("Charlie", "Brown", "1000003", "604-333-3333", 3.2);
+    Student d("David", "Adams", "1000004", "604-444-4444", 3.9);
+    Student e("Eva", "Robinson", "1000005", "604-555-5555", 2.8);
+
+    //Testing Class
+    Course z("CMPT 1209", 3);
+    z.add(a);
+    z.add(b);
+    z.add(c);
+    z.add(d);
+    z.add(e);
+
+    cout << "\nCourse Data" << endl;
+    cout << "Course code: " << z.getCode() << endl;
+    cout << "Course section: " << z.getSection() << endl;
+    cout << "Course occupancy: " << z.getNumStudents() << endl;
+
+    cout << endl;
+    z.display();
+
+    cout << "Please input a student FIRST name to locate a student by firstName name: " << endl;
+    cin >> temp;
+    z.displayByFirst(temp);
+
+    cout << "Please input a student LAST name to locate a student by lastName name: " << endl;
+    cin >> temp;
+    z.displayByLast(temp);
+
+    cout << "Please input a student studentID to locate a student by studentID: " << endl;
+    cin >> temp;
+    z.displayBystudentID(temp);
+
+    cout << "Please input a student Phone Number to locate a student by Phone Number: " << endl;
+    cin >> temp;
+    z.displayByPhone(temp);
+
+    cout << "\n-----Sorting tests-----\n" << endl;
+    cout << "Press enter to begin sorting by ascending firstName names" << endl;
+    cin.get();
+    z.sortByFirstAsc();
+    cout << "Press enter to begin sorting by descending firstName names" << endl;
+    cin.get();
+    z.sortByFirstDes();
+    cout << "Press enter to begin sorting by ascending lastName names" << endl;
+    cin.get();
+    z.sortByLastAsc();
+    cout << "Press enter to begin sorting by descending lastName names" << endl;
+    cin.get();
+    z.sortByLastDes();
+    cout << "Press enter to begin sorting by ascending student studentIDs" << endl;
+    cin.get();
+    z.sortBystudentIDAsc();
+    cout << "Press enter to begin sorting by descending student studentIDs" << endl;
+    cin.get();
+    z.sortBystudentIDDes();
+    cout << "Press enter to begin sorting by ascending Phone Numbers" << endl;
+    cin.get();
+    z.sortByPhoneAsc();
+    cout << "Press enter to begin sorting by descending Phone Numbers" << endl;
+    cin.get();
+    z.sortByPhoneDes();
+    cout << "Press enter to begin sorting by ascending GPAS" << endl;
+    cin.get();
+    z.sortByGPAAsc();
+    cout << "Press enter to begin sorting by descending GPAS" << endl;
+    cin.get();
+    z.sortByGPADes();
+
+    z.display();
+    cout << "Please choose a student above and enter their phone number to drop them from the class" << endl;
+    cin >> temp;
+    z.remove(temp);
+    z.display();
+    return 0;
+}
