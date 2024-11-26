@@ -1,0 +1,187 @@
+#include <iostream>
+#include <string>
+#include <iomanip>
+#include <vector>
+using namespace std;
+
+class Student {
+private:
+    string firstName;
+    string lastName;
+    string studentID;
+    string phoneNumber;
+    double gpa;
+public:
+    string getFirstName() const;
+    string getLastName() const;
+    string getStudentID() const;
+    string getPhoneNumber() const;
+    double getGPA() const;
+    void setFirstName(string);
+    void setLastName(string);
+    void setStudentID(string);
+    void setPhoneNumber(string);
+    void setGPA(double);
+    void input();
+    void output() const;
+    Student();
+    Student(string, string, string, string, double);
+};
+
+// Default constructor
+Student::Student() : firstName(" "), lastName(" "), studentID(" "), phoneNumber(" "), gpa(0) {}
+
+// Parameterized constructor
+Student::Student(string first, string last, string id, string phone, double grade)
+    : firstName(first), lastName(last), studentID(id), phoneNumber(phone), gpa(grade) {}
+
+// Input for new student
+void Student::input() {
+    cout << "Enter first name: ";
+    getline(cin, firstName);
+    cout << "Enter last name: ";
+    getline(cin, lastName);
+    cout << "Enter student ID: ";
+    getline(cin, studentID);
+    cout << "Enter phone number (format 604-555-5555): ";
+    getline(cin, phoneNumber);
+    cout << "Enter GPA: ";
+    cin >> gpa;
+    cin.ignore();
+}
+
+// Student output formatting
+void Student::output() const {
+    cout << left << setw(10) << firstName
+         << left << setw(12) << lastName
+         << "ID: #" << left << setw(13) << studentID
+         << "Phone number: " << left << setw(15) << phoneNumber
+         << "GPA: " << gpa << endl;
+}
+
+// Accessors and mutators
+string Student::getFirstName() const { return firstName; }
+string Student::getLastName() const { return lastName; }
+string Student::getStudentID() const { return studentID; }
+string Student::getPhoneNumber() const { return phoneNumber; }
+double Student::getGPA() const { return gpa; }
+void Student::setFirstName(string f) { firstName = f; }
+void Student::setLastName(string l) { lastName = l; }
+void Student::setStudentID(string i) { studentID = i; }
+void Student::setPhoneNumber(string p) { phoneNumber = p; }
+void Student::setGPA(double g) { gpa = g; }
+
+
+class Course {
+private:
+    string courseCode;
+    int sectionNum;
+    int capacity;
+    vector<Student> classList;
+public:
+    Course();
+    Course(string, int, int);
+    ~Course();
+    string getCourseCode() const;
+    int getSectionNum() const;
+    int getCapacity() const;
+    int getNumStudents() const;
+    void setCourseCode(string);
+    void setSectionNum(int);
+    void addStudent(const Student&);
+    void removeStudentByPhone(const string&);
+    void display() const;
+    void displayByFirst(const string&) const;
+    void displayByLast(const string&) const;
+    void displayByID(const string&) const;
+    void displayByPhone(const string&) const;
+    void sortByFirstAsc();
+    void sortByFirstDes();
+    void sortByLastAsc();
+    void sortByLastDes();
+    void sortByIDAsc();
+    void sortByIDDes();
+    void sortByPhoneAsc();
+    void sortByPhoneDes();
+    void sortByGPAAsc();
+    void sortByGPADes();
+};
+
+Course::Course() {
+    courseCode = "CMPT";
+    sectionNum = 1;
+    capacity = 35;
+}
+
+Course::Course(string code, int section, int cap) {
+    courseCode = code;
+    sectionNum = section;
+    capacity = cap;
+}
+
+
+string Course::getCourseCode() const { return courseCode; }
+int Course::getSectionNum() const { return sectionNum; }
+int Course::getCapacity() const { return capacity; }
+int Course::getNumStudents() const { return static_cast<int>(classList.size()); } // Cast size to int
+
+void Course::setCourseCode(string code) { courseCode = code; }
+void Course::setSectionNum(int section) { sectionNum = section; }
+
+void Course::addStudent(const Student& student) {
+    if (static_cast<int>(classList.size()) < capacity) { // Compare size with capacity safely
+        classList.push_back(student);
+    } else {
+        cout << "Course is full, cannot add more students." << endl;
+    }
+}
+
+void Course::removeStudentByPhone(const string& phone) {
+    auto it = std::find_if(classList.begin(), classList.end(),
+                           [&](const Student& s) { return s.getPhoneNumber() == phone; });
+    if (it != classList.end()) {
+        classList.erase(it);
+    } else {
+        cout << "Student not found!" << endl;
+    }
+}
+
+void Course::display() const {
+    for (const auto& student : classList) {
+        student.output();
+    }
+}
+
+// Sorting functions using std::sort
+void Course::sortByFirstAsc() {
+    std::sort(classList.begin(), classList.end(),
+              [](const Student& a, const Student& b) { return a.getFirstName() < b.getFirstName(); });
+}
+
+void Course::sortByGPAAsc() {
+    std::sort(classList.begin(), classList.end(),
+              [](const Student& a, const Student& b) { return a.getGPA() < b.getGPA(); });
+}
+
+
+// Main function to test the implementation
+int main() {
+    Course myCourse("CMPT1020", 1, 5);
+
+    // Test cases
+    cout << "Adding students...\n";
+    Student s1("Alice", "Smith", "1001", "604-111-1111", 3.8);
+    Student s2("Bob", "Jones", "1002", "604-222-2222", 3.6);
+    myCourse.addStudent(s1);
+    myCourse.addStudent(s2);
+    
+    cout << "Current students:\n";
+    myCourse.display();
+
+    cout << "Removing a student by phone number...\n";
+    myCourse.removeStudentByPhone("604-111-1111");
+    cout << "Current students after removal:\n";
+    myCourse.display();
+
+    return 0;
+}
