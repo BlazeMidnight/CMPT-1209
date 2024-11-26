@@ -1,0 +1,65 @@
+#include <iostream>
+using namespace std;
+
+class Animal {
+public:
+    void eat() {
+        cout << "Animals eat food" << endl;
+    }
+};
+
+class Cat : public Animal{
+public:
+    virtual void eat() {
+        cout << "Cats eat rats" << endl;
+    }
+};
+
+class Bird : public Animal {
+public:
+    virtual void eat() {
+        cout << "Birds eat seeds" << endl;
+    }
+};
+
+void myFunc(Animal* x) {
+    x->eat();
+}
+
+int main() {
+    /*
+    Animal c;
+    c.eat();
+    Cat d;
+    d.eat();
+    Bird f;
+    f.eat();
+     */
+    
+    
+    /*
+    Cat* c = new Cat; // Creates a new pointer that points to a new cat. NOT AN ARRAY (don't use brackets).
+    c->eat();
+    
+    delete c; // Don't forget to delete old memory.
+     */
+    
+    /*
+    Animal a;
+    Cat c;
+    myFunc(a);
+     */
+    Animal *a = new Animal;
+    Bird* b = new Bird;
+    Cat* c = new Cat;
+    
+    myFunc(a);
+    myFunc(a);
+    myFunc(a);
+    
+    delete a;
+    delete b;
+    delete c;
+    
+    return 0;
+}
