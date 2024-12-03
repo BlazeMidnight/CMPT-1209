@@ -1,5 +1,7 @@
 #include <iostream>
-#include <vector>
+#include <iomanip>
+#include <queue>
+#include <string>
 using namespace std;
 
 class Passenger {
@@ -12,8 +14,9 @@ public:
     Passenger(string n = "", double f = 0.0, int p = 0) : name(n), fare(f), points(p) {}
 
     void input() {
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
         cout << "Enter name: ";
-        cin >> name;
+        getline(cin, name);
         cout << "Enter fare: ";
         cin >> fare;
         cout << "Enter points: ";
@@ -41,7 +44,7 @@ private:
 
     // Custom bubble sort to sort passengers
     void sortPassengers() {
-        int n = passengers.size();
+        long int n = passengers.size();
         for (int i = 0; i < n - 1; ++i) {
             for (int j = 0; j < n - i - 1; ++j) {
                 if (passengers[j + 1] < passengers[j]) {
@@ -77,26 +80,53 @@ public:
     }
 };
 
-int main() {
-    Flight flight("AA123");
-    Passenger p;
+// Customer structure
+struct Customer {
+    double fare;
+    int points;
+    string name;
 
-    for (int i = 0; i < 5; ++i) {
-        cout << "Enter details for passenger " << i + 1 << ":\n";
-        p.input();
-        flight.insert(p);
+    Customer(double f, int p, string n) : fare(f), points(p), name(n) {}
+};
+
+// Function to print the queue
+void printQueue(queue<Customer> q) {
+    cout << "Queue is :" << endl;
+    cout << setw(10) << "Fare" << setw(10) << "Points" << setw(15) << "Name" << endl;
+    cout << "-----------------------------------" << endl;
+
+    while (!q.empty()) {
+        Customer c = q.front();
+        cout << setw(10) << fixed << setprecision(2) << c.fare
+             << setw(10) << c.points
+             << setw(15) << c.name << endl;
+        q.pop();
     }
+    cout << endl;
+}
 
-    cout << "\nPassenger list:\n";
-    flight.display();
+int main() {
+    queue<Customer> q;
 
-    flight.leave();
-    cout << "\nAfter removing one passenger:\n";
-    flight.display();
+    // Adding customers to the queue
+    q.push(Customer(490.28, 220, "Terry"));
+    q.push(Customer(480.12, 245, "John"));
+    q.push(Customer(698.95, 100, "Alex"));
+    q.push(Customer(577.21, 311, "Susan"));
+    q.push(Customer(590.08, 414, "Brian"));
 
-    flight.leave();
-    cout << "\nAfter removing another passenger:\n";
-    flight.display();
+    // Initial queue
+    printQueue(q);
+
+    // Removing the first customer
+    cout << "Customer who leaves is: " << q.front().name << endl;
+    q.pop();
+    printQueue(q);
+
+    // Removing the next customer
+    cout << "Customer who leaves is: " << q.front().name << endl;
+    q.pop();
+    printQueue(q);
 
     return 0;
 }
